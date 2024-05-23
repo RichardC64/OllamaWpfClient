@@ -20,21 +20,36 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     // PROPERTIES ========================================
+    /// <summary>
+    /// La liste des messages de la conversation
+    /// </summary>
     [ObservableProperty]
     private ObservableCollection<ConversationItem> _conversationItems = new();
 
+    /// <summary>
+    /// Le message à envoyer
+    /// </summary>
     [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
     [ObservableProperty] private string _message = string.Empty;
 
+    /// <summary>
+    /// L'IA est-elle en train de travailler ?
+    /// </summary>
     [ObservableProperty] private bool _isBotWorking;
 
     // COMMANDS ========================================
+    /// <summary>
+    /// Vide la conversation
+    /// </summary>
     [RelayCommand]
     private void Reset()
     {
         ConversationItems.Clear();
     }
 
+    /// <summary>
+    /// Envoi le message à l'IA
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanSendMessageExecute))]
     public async Task SendMessageAsync()
     {

@@ -2,14 +2,10 @@
 
 namespace OllamaWpfClient.Services.Impl;
 
-public class OllamaClientBot : IBot
+public class OllamaClientBot(IOllamaHttpClient ollamaHttpClient) : IBot
 {
-    private readonly IOllamaHttpClient _ollamaHttpClient;
+    private readonly IOllamaHttpClient _ollamaHttpClient = ollamaHttpClient ?? throw new ArgumentNullException(nameof(ollamaHttpClient));
 
-    public OllamaClientBot(IOllamaHttpClient ollamaHttpClient)
-    {
-        _ollamaHttpClient = ollamaHttpClient ?? throw new ArgumentNullException(nameof(ollamaHttpClient));
-    }
     public async IAsyncEnumerable<string> SendMessageAsync(string message)
     {
         // Envoi du message à l'API de Ollama
@@ -22,9 +18,9 @@ public class OllamaClientBot : IBot
                     new()
                     {
                         Content = message,
-                        Role = "user"
-                    }
-                ]
+                        Role = "user",
+                    },
+                ],
             }, CancellationToken.None);
 
         await foreach (var m in result.ConfigureAwait(false))
