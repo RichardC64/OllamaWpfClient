@@ -1,4 +1,6 @@
-﻿namespace OllamaWpfClient.Services;
+﻿using OllamaClient.Models;
+
+namespace OllamaWpfClient.Services;
 
 public interface IBot
 {

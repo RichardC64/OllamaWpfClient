@@ -8,9 +8,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance ollamaWpfClient:MainWindowViewModel, IsDesignTimeCreatable=True }"
-        Title="MainWindow" Height="480" Width="640">
+        Title="Ollama WPF Client" Height="480" Width="640">
     <Window.Resources>
-        
         <DataTemplate x:Key="UserTemplate" DataType="{x:Type entities:ConversationItem}">
             <Border
                 Padding="10"
@@ -37,7 +36,6 @@
             x:Key="ConversationItemTemplateSelector"
             User="{StaticResource UserTemplate}"
             Bot="{StaticResource BotTemplate}" />
-
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -47,8 +45,9 @@
         </Grid.RowDefinitions>
         <!-- Barre d'outils -->
         <ToolBar>
-            <Button Content="Reset"
-                    Command="{Binding ResetCommand}"/>
+            <Button
+                Content="Reset"
+                Command="{Binding ResetCommand}" />
         </ToolBar>
 
         <!-- Zone de conversation -->
@@ -56,23 +55,25 @@
             Grid.Row="1"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl ItemsSource="{Binding ConversationItems}"
-                          ItemTemplateSelector="{StaticResource ConversationItemTemplateSelector}" />
+            <ItemsControl
+                ItemsSource="{Binding ConversationItems}"
+                ItemTemplateSelector="{StaticResource ConversationItemTemplateSelector}" />
         </ScrollViewer>
 
         <!-- Zone de saisie-->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox 
                 IsEnabled="{Binding IsBotWorking, Converter={StaticResource InvertedBoolConverter}}"
                 Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                 VerticalContentAlignment="Center" />
-            <Button Grid.Column="1" 
-                    Content="Envoyer" 
-                    Command="{Binding SendMessageCommand}" />
+            <Button
+                Grid.Column="1"
+                Content="Envoyer"
+                Command="{Binding SendMessageCommand}" />
         </Grid>
     </Grid>
 </Window>

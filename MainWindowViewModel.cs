@@ -7,9 +7,18 @@ using OllamaWpfClient.Services;
 
 namespace OllamaWpfClient;
 
-[ObservableObject]
-public partial class MainWindowViewModel(IBot bot)
+public partial class MainWindowViewModel : ObservableObject
 {
+    private readonly IBot? _bot;
+    // CONTRUCTORS ========================================
+    public MainWindowViewModel()
+    {}
+
+    public MainWindowViewModel(IBot bot)
+    {
+        _bot = bot;
+    }
+
     // PROPERTIES ========================================
     [ObservableProperty]
     private ObservableCollection<ConversationItem> _conversationItems = new();
@@ -29,10 +38,13 @@ public partial class MainWindowViewModel(IBot bot)
     [RelayCommand(CanExecute = nameof(CanSendMessageExecute))]
     public async Task SendMessageAsync()
     {
+        if (_bot == null) throw new InvalidOperationException("Bot is not initialized");
+
         IsBotWorking = true;
+        // Ajout du message de l'utilisateur
         ConversationItems.Add(new ConversationItem(Message, ConversationSource.User));
         var response = new StringBuilder();
-        await foreach (var m in bot.SendMessageAsync(Message))
+        await foreach (var m in _bot.SendMessageAsync(Message).ConfigureAwait(true))
         {
             response.Append(m);
         }
@@ -41,6 +53,5 @@ public partial class MainWindowViewModel(IBot bot)
         Message = string.Empty;
     }
 
-    private bool CanSendMessageExecute() => !_isBotWorking && !string.IsNullOrWhiteSpace(Message);
-    
+    private bool CanSendMessageExecute() => !IsBotWorking && !string.IsNullOrWhiteSpace(Message) && _bot != null;
 }

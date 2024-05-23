@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OllamaClient.Extensions;
 using OllamaWpfClient.Services;
+using OllamaWpfClient.Services.Impl;
 
 namespace OllamaWpfClient;
 
