@@ -1,8 +1,6 @@
-﻿using OllamaClient.Models;
-
-namespace OllamaWpfClient.Services;
+﻿namespace OllamaWpfClient.Services;
 
 public interface IBot
 {
-    IAsyncEnumerable<string> SendMessageAsync(string message);
+    Task<string> SendMessageAsync(string message);
 }

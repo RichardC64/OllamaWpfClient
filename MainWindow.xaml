@@ -6,9 +6,10 @@
         xmlns:ollamaWpfClient="clr-namespace:OllamaWpfClient"
         xmlns:entities="clr-namespace:OllamaWpfClient.Entities"
         mc:Ignorable="d"
+        
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance ollamaWpfClient:MainWindowViewModel, IsDesignTimeCreatable=True }"
-        Title="Ollama WPF Client" Height="480" Width="640">
+        Title="Ollama WPF Client" Height="600" Width="800">
     <Window.Resources>
         <DataTemplate x:Key="UserTemplate" DataType="{x:Type entities:ConversationItem}">
             <Border
@@ -44,14 +45,30 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!-- Barre d'outils -->
-        <ToolBar>
+        <ToolBar >
             <Button
+                Padding="10"
+                Margin="5"
                 Content="Reset"
                 Command="{Binding ResetCommand}" />
+            
+            <RadioButton 
+                Padding="10"
+                Margin="5"
+                Content="Semantic Kernel" 
+                GroupName="Bots" 
+                IsChecked="{Binding IsSkSelected, Mode=TwoWay}"/>
+            <RadioButton 
+                Padding="10"
+                Margin="5"
+                Content="Ollama Client" 
+                GroupName="Bots" 
+                IsChecked="{Binding IsSkSelected, Converter={StaticResource InvertedBoolConverter}, Mode=TwoWay}"/>
         </ToolBar>
 
         <!-- Zone de conversation -->
         <ScrollViewer
+            x:Name="ScrollViewer"
             Grid.Row="1"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">

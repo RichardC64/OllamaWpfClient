@@ -1,12 +1,14 @@
-﻿using OllamaClient;
+﻿using System.Text;
+using OllamaClient;
 
 namespace OllamaWpfClient.Services.Impl;
 
 public class OllamaClientBot(IOllamaHttpClient ollamaHttpClient) : IBot
 {
-    private readonly IOllamaHttpClient _ollamaHttpClient = ollamaHttpClient ?? throw new ArgumentNullException(nameof(ollamaHttpClient));
+    private readonly IOllamaHttpClient _ollamaHttpClient =
+        ollamaHttpClient ?? throw new ArgumentNullException(nameof(ollamaHttpClient));
 
-    public async IAsyncEnumerable<string> SendMessageAsync(string message)
+    public async Task<string> SendMessageAsync(string message)
     {
         // Envoi du message à l'API de Ollama
         var result = _ollamaHttpClient.SendChat(
@@ -15,18 +17,18 @@ public class OllamaClientBot(IOllamaHttpClient ollamaHttpClient) : IBot
                 Model = "Llama3",
                 Messages =
                 [
-                    new()
-                    {
-                        Content = message,
-                        Role = "user",
-                    },
+                    new () { Content = "Vous êtes un AI assistant qui aide les gens à trouver des informations. Vous répondez en français.", Role = "system", },
+                    new() { Content = message, Role = "user", },
                 ],
-            }, CancellationToken.None);
+            }, CancellationToken.None).ConfigureAwait(false);
 
-        await foreach (var m in result.ConfigureAwait(false))
+        var sb = new StringBuilder();
+        await foreach (var m in result)
         {
             if (m.Message?.Content == null) continue;
-            yield return m.Message.Content;
+            sb.Append(m.Message.Content);
         }
+
+        return sb.ToString();
     }
 }

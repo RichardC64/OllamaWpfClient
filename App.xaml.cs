@@ -17,13 +17,14 @@ public partial class App
     public IServiceProvider Services { get; }
 
 
-    private static IServiceProvider ConfigureServices()
+    private static ServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
         
         // Services
         services.AddOllamaClient();
         services.AddSingleton<IBot, OllamaClientBot>();
+        services.AddSingleton<IAsyncBot, SkBot>();
 
         // ViewModels
         services.AddTransient<MainWindowViewModel>();
